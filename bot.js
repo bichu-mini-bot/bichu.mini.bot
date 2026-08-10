@@ -80,44 +80,6 @@ const gracefulShutdown = (signal) => {
   process.exit(0);
 };
 
-// ========== CHECK CHANNELS FUNCTION ==========
-const checkUserJoinedChannels = async (userId) => {
-  const channels = ['@Bich-MD', '@Bichu-MD'];
-  let allJoined = true;
-
-  for (const channel of channels) {
-    try {
-      const member = await bot.getChatMember(channel, userId);
-      if (['left', 'kicked'].includes(member.status)) {
-        allJoined = false;
-        break;
-      }
-    } catch {
-      allJoined = false;
-      break;
-    }
-  }
-  return allJoined;
-};
-
-// ========== SEND CHANNELS REQUIRED MESSAGE ==========
-const sendChannelsRequiredMessage = async (chatId) => {
-  return bot.sendMessage(chatId,
-    `🚨 *You must join our official channels before pairing.*`,
-    {
-      parse_mode: 'Markdown',
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: '📢 Channel 1', url: 'https://t.me/bichuxboy2' }],
-          [{ text: '📢 Channel 2', url: 'https://t.me/bichuxboy1' }],
-          [{ text: '👥 Group', url: 'https://t.me/+tLWu7JpAUgw2NmQ0' }],
-          [{ text: '✅ I have joined', callback_data: 'check_join' }]
-        ]
-      }
-    }
-  );
-};
-
 // ========== SEND GROUP MESSAGE (STYLISH) ==========
 const sendGroupMessage = async (chatId, replyToMessageId = null) => {
   const botInfo = await bot.getMe();
@@ -180,13 +142,7 @@ bot.onText(/\/pair(?:\s+(.+))?/, async (msg, match) => {
     return sendGroupMessage(chatId, msg.message_id);
   }
 
-  // 🔥 PRIVATE CHAT MEIN NORMAL PAIRING PROCESS
-  const allJoined = await checkUserJoinedChannels(userId);
-  
-  if (!allJoined) {
-    return sendChannelsRequiredMessage(chatId);
-  }
-
+  // 🔥 PRIVATE CHAT MEIN PAIRING PROCESS (NO CHANNEL CHECK)
   if (!text) {
     userStates.set(userId, { step: 'awaiting_number' });
     return bot.sendMessage(chatId, 
@@ -280,24 +236,6 @@ bot.on('callback_query', async (callbackQuery) => {
     });
     return;
   }
-
-  if (data === 'check_join') {
-    const allJoined = await checkUserJoinedChannels(userId);
-
-    if (allJoined) {
-      await bot.answerCallbackQuery(callbackQuery.id, { 
-        text: '✅ Thanks for joining! Now use /pair command.', 
-        show_alert: true
-      });
-      await bot.sendMessage(chatId, '✅ *Thanks for joining all channels!*\n\nNow send /pair to start pairing.', { parse_mode: 'Markdown' });
-    } else {
-      await bot.answerCallbackQuery(callbackQuery.id, { 
-        text: '❌ Please join all channels first!', 
-        show_alert: true
-      });
-    }
-    return;
-  }
 });
 
 // ========== TEXT MESSAGE HANDLER ==========
@@ -318,24 +256,7 @@ bot.on('message', async (msg) => {
   
   userStates.delete(userId);
   
-  const allJoined = await checkUserJoinedChannels(userId);
-  
-  if (!allJoined) {
-    return bot.sendMessage(chatId,
-      `🚨 *You must join our official channels before pairing.*`,
-      {
-        parse_mode: 'Markdown',
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: '📢 Channel 1', url: 'https://t.me/bichuxboy2' }],
-            [{ text: '📢 Channel 2', url: 'https://t.me/bichuxboy1' }],
-            [{ text: '👥 Group', url: 'https://t.me/+tLWu7JpAUgw2NmQ0' }],
-            [{ text: '✅ I have joined', callback_data: 'check_join' }]
-          ]
-        }
-      }
-    );
-  }
+  // NO CHANNEL CHECK - DIRECT PAIRING
 
   if (/[a-z]/i.test(text)) {
     return bot.sendMessage(chatId, '❌ Letters are not allowed. Send only numbers.');
