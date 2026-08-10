@@ -109,7 +109,7 @@ const sendChannelsRequiredMessage = async (chatId) => {
       reply_markup: {
         inline_keyboard: [
           [{ text: '📢 Channel 1', url: 'https://t.me/bichuxboy2' }],
-          [{ text: '📢 Channel 2', url: 'https://t.me/bichuxboy2' }],
+          [{ text: '📢 Channel 2', url: 'https://t.me/bichuxboy1' }],
           [{ text: '👥 Group', url: 'https://t.me/+tLWu7JpAUgw2NmQ0' }],
           [{ text: '✅ I have joined', callback_data: 'check_join' }]
         ]
@@ -328,7 +328,7 @@ bot.on('message', async (msg) => {
         reply_markup: {
           inline_keyboard: [
             [{ text: '📢 Channel 1', url: 'https://t.me/bichuxboy2' }],
-            [{ text: '📢 Channel 2', url: 'https://t.me/bichuxboy2' }],
+            [{ text: '📢 Channel 2', url: 'https://t.me/bichuxboy1' }],
             [{ text: '👥 Group', url: 'https://t.me/+tLWu7JpAUgw2NmQ0' }],
             [{ text: '✅ I have joined', callback_data: 'check_join' }]
           ]
