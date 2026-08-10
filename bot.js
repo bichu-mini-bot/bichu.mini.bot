@@ -108,9 +108,9 @@ const sendChannelsRequiredMessage = async (chatId) => {
       parse_mode: 'Markdown',
       reply_markup: {
         inline_keyboard: [
-          [{ text: '📢 Channel 1', url: 'https://whatsapp.com/channel/0029VbDLF614NVidqsqjqV2z' }],
-          [{ text: '📢 Channel 2', url: 'https://whatsapp.com/channel/0029VbDLF614NVidqsqjqV2z' }],
-          [{ text: '👥 Group', url: 'https://whatsapp.com/channel/0029VbDLF614NVidqsqjqV2z' }],
+          [{ text: '📢 Channel 1', url: 'https://t.me/bichuxboy2' }],
+          [{ text: '📢 Channel 2', url: 'https://t.me/bichuxboy1' }],
+          [{ text: '👥 Group', url: 'https://t.me/+pMIeOYHuLEQ3YmRk' }],
           [{ text: '✅ I have joined', callback_data: 'check_join' }]
         ]
       }
